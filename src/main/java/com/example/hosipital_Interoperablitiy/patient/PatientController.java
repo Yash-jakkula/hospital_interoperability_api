@@ -1,9 +1,13 @@
-package com.example.hosipital_Interoperablitiy;
+package com.example.hosipital_Interoperablitiy.patient;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/patient")
@@ -17,16 +21,37 @@ public class PatientController {
 
     @PostMapping("/addpatient")
     public ResponseEntity<String> addPatient(@RequestBody PatientSchema patientData){
+        System.out.println(patientData);
         patient.save(patientData);
         return ResponseEntity.ok("user saved");
 
     }
 
     @GetMapping("/getpatient/{id}")
-    public ResponseEntity<Boolean> getPatient(@PathVariable Integer id){
-        patient.findById(id);
+    public ResponseEntity<HashMap<String,PatientSchema>> getPatient(@PathVariable Integer id){
+        HashMap<String, PatientSchema> response = new HashMap<>();
+        Optional<PatientSchema> patientInfo = patient.findById(id);
+
+        if (patientInfo.isPresent()) {
+            response.put("patient", patientInfo.get());
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    @PutMapping("/removepatient/{id}")
+    public ResponseEntity<Boolean> removePatient(@PathVariable Integer id){
+        patient.deleteById(id);
         return ResponseEntity.ok(true);
     }
+
+    @PostMapping("/update/{id}")
+    public ResponseEntity<Boolean> updatePatient(@RequestBody PatientSchema patientData){
+        patient.save(patientData);
+        return ResponseEntity.ok(true);
+    }
+
 //    public String longestPalindrome() {
 //        String s = "abababscceadfkaskdfjakkkkkkkreeefadfase";
 //        StringBuilder sb = new StringBuilder(s);

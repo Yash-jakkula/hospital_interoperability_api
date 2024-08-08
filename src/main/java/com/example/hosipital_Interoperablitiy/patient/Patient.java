@@ -1,4 +1,4 @@
-package com.example.hosipital_Interoperablitiy;
+package com.example.hosipital_Interoperablitiy.patient;
 
 import org.springframework.data.repository.CrudRepository;
 
