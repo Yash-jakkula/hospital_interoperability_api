@@ -8,7 +8,7 @@ import jakarta.persistence.Id;
 @Entity
 public class PatientSchema {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
     private int id;
     private String name;
     private String phone;

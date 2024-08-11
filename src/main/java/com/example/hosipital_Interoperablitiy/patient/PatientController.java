@@ -15,40 +15,46 @@ public class PatientController {
     private static final Logger log = LoggerFactory.getLogger(PatientController.class);
     private final Patient patient;
 
-    public PatientController(Patient patient) {
+    private PatientController(Patient patient) {
         this.patient = patient;
     }
 
     @PostMapping("/addpatient")
-    public ResponseEntity<String> addPatient(@RequestBody PatientSchema patientData){
-        System.out.println(patientData);
+    private ResponseEntity<String> addPatient(@RequestBody PatientSchema patientData){
         patient.save(patientData);
         return ResponseEntity.ok("user saved");
-
     }
 
     @GetMapping("/getpatient/{id}")
-    public ResponseEntity<HashMap<String,PatientSchema>> getPatient(@PathVariable Integer id){
-        HashMap<String, PatientSchema> response = new HashMap<>();
+    private ResponseEntity<Optional<PatientSchema>> getPatient(@PathVariable Integer id){
         Optional<PatientSchema> patientInfo = patient.findById(id);
-
         if (patientInfo.isPresent()) {
-            response.put("patient", patientInfo.get());
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(patientInfo);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
+    @GetMapping("/getallpatient")
+    private ResponseEntity<Iterable<PatientSchema>>  getAllPatients(){
+        Iterable<PatientSchema> patients = patient.findAll();
+        return ResponseEntity.ok(patients);
+    }
+
     @PutMapping("/removepatient/{id}")
-    public ResponseEntity<Boolean> removePatient(@PathVariable Integer id){
+    private ResponseEntity<Boolean> removePatient(@PathVariable Integer id){
         patient.deleteById(id);
         return ResponseEntity.ok(true);
     }
 
     @PostMapping("/update/{id}")
-    public ResponseEntity<Boolean> updatePatient(@RequestBody PatientSchema patientData){
+    private ResponseEntity<Boolean> updatePatient(@RequestBody PatientSchema patientData){
         patient.save(patientData);
+        return ResponseEntity.ok(true);
+    }
+    @GetMapping("/removeallpatient")
+    private ResponseEntity<Boolean> removeAllPatient(){
+        patient.deleteAll();
         return ResponseEntity.ok(true);
     }
 
