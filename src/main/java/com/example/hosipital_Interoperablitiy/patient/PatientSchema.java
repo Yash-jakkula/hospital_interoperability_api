@@ -8,12 +8,12 @@ import jakarta.persistence.Id;
 @Entity
 public class PatientSchema {
     @Id
-
-    private int id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
     private String name;
     private String phone;
     private String problem;
-    public void setId(int id){
+    public void setId(String id){
         this.id = id;
     }
     public void setName(String name){
@@ -26,7 +26,7 @@ public class PatientSchema {
         this.problem = problem;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
     public String getName(){
