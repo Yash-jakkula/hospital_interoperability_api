@@ -15,10 +15,12 @@ import java.util.Optional;
 public class PatientController {
     private static final Logger log = LoggerFactory.getLogger(PatientController.class);
     private final Patient patient;
+    private final PatientMetaData patientmetadata;
 
     @Autowired
-    public PatientController(Patient patient) {
+    public PatientController(Patient patient,PatientMetaData patientmetadata) {
         this.patient = patient;
+        this.patientmetadata = patientmetadata;
     }
 
     @PostMapping("/addpatient")
@@ -60,16 +62,19 @@ public class PatientController {
         return ResponseEntity.ok(true);
     }
 
-    @GetMapping("/getmetadata/{id}")
-    public ResponseEntity<Optional<PatientSchema>> getMetaData(@PathVariable String id){
-        Optional<PatientSchema> meta_data = patient.patient_meta_data(id);
-        if(meta_data.isPresent()){
-            return ResponseEntity.ok(meta_data);
-        }
-        else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Optional.empty());
-        }
-    }
+//    @GetMapping("/getmetadata/{id}")
+//    public ResponseEntity<Optional<PatientMetaDataSchema>> getMetaData(@PathVariable String id){
+//
+//        Optional<PatientSchema> meta_data = patient.patient_meta_data(id);
+//       Optional<PatientMetaDataSchema> meta = patientmetadata.findMetaData(id);
+//
+//        if(meta.isPresent()){
+//            return ResponseEntity.ok(meta);
+//        }
+//        else{
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Optional.empty());
+//        }
+//    }
 
 }
 
